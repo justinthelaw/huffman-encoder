@@ -13,10 +13,8 @@
 
 public class App {
     public static void main(String[] args) throws Exception {
-        Node nodeX = new Node(3, "X");
-        Node nodeY = new Node(1, "Y");
-        Node nodeZ = new Node(2, "Z");
-        Node[] nodeArr = {nodeY, nodeZ, nodeX};
+        Node[] nodeArr = ReadWrite.frequencyListRead(args[0]);
+        MergeSort.sort(nodeArr, 0, nodeArr.length - 1);
         BinaryTree tree = new BinaryTree(nodeArr);
         System.out.println(tree.toString());
     }

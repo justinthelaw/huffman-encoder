@@ -37,7 +37,7 @@ public class BinaryTree {
     Node right = nodes[1];
     // initialize the parent node parameters
     int weight = left.weight() + right.weight();
-    String data = left.data() + right.data();
+    String data = right.data() + left.data();
     Node parent = new Node(weight, data);
     // parent is at parentIndex
     int parentIndex = (this.size - 2) / 2;
@@ -49,16 +49,27 @@ public class BinaryTree {
     int rightIndex = this.size - 1;
     this.tree[rightIndex] = right;
 
+    // TODO: compare internal node to new inserted node to determine which is right vs. left
     if (nodes.length > 2) {
       // add-on to base tree all upper nodes
       for (int i = 2; i < nodes.length; i++) {
+        // set previous parent as right child node
         rightIndex = parentIndex;
+        // determine parent node and left child node
+        // based on binary tree array implementation rules
         parentIndex = (rightIndex / 2) - 1;
+        // if root node edge case
+        if (parentIndex == 0) {
+          parentIndex = 1;
+          leftIndex = 2;
+          this.tree[3] = this.tree[2];
+        } else {
+          leftIndex = parentIndex * 2;
+        }
         left = nodes[i];
-        leftIndex = parentIndex * 2;
         this.tree[leftIndex] = left;
         weight += left.weight();
-        data += left.data();
+        data = left.data() + data;
         parent = new Node(weight, data);
         this.tree[parentIndex] = parent;
       }

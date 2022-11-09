@@ -21,66 +21,39 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.InputMismatchException;
 
 public class ReadWrite {
 
   /**
    * Buffered read of a file formatted with data on each line. Meant to read
-   * string-by-string performing a check on each string
+   * line-by-line performing a check on each string.
    *
    * @param input  file location as a string
-   * @param int    lines to skip during read
-   * @param checks to be performed on each read item
-   * @return BinaryTree containing the data
+   * @return Node[] containing the data
    */
-  // public static BinaryTree<Node> bufferedRead(String input, int linesToSkip, Method check)
-  //     throws FileNotFoundException, IOException, IllegalAccessException, IllegalArgumentException,
-  //     InvocationTargetException, InputMismatchException {
-  //   BinaryTree<Node> prefixList = new BinaryTree<>();
-  //   String currentCheck = "";
-  //   // try with resource, buffered file read on file at location
-  //   try (BufferedReader bufferedInputData = new BufferedReader(
-  //       new FileReader(new File(input)))) {
-  //     // move to line of interest
-  //     for (int line = 0; line < linesToSkip; line++) {
-  //       bufferedInputData.readLine();
-  //     }
-  //     // read string-by-string, until no strings are left on line
-  //     int i;
-  //     while ((i = bufferedInputData.read()) != -1) {
-  //       char c = (char) i;
-  //       if (c == '\n' || c == '\r') {
-  //         break;
-  //       }
-  //       currentCheck = check.getName();
-  //       Object result = check.invoke(null, c);
-  //       if ((boolean) result == false) {
-  //         prefixList.empty();
-  //         throw new InputMismatchException("Invalid data \"" + c + "\"");
-  //       } else {
-  //         prefixList.insertAtEnd(new Node<String>(c));
-  //       }
-  //     }
-  //     // catch block with tailored problem statements
-  //   } catch (FileNotFoundException e) {
-  //     FormatError.printError(e, "File or file path not invalid");
-  //   } catch (IOException e) {
-  //     FormatError.printError(e, "Incorrectly formatted data");
-  //   } catch (IllegalAccessException e) {
-  //     FormatError.printError(e, "Method not callable by this class for: " + currentCheck + "()");
-  //   } catch (IllegalArgumentException e) {
-  //     FormatError.printError(e, "Incorrect arguments or argument types for: " + currentCheck + "()");
-  //   } catch (InvocationTargetException e) {
-  //     FormatError.printError(e, "Underlying method exception for: " + currentCheck + "()");
-  //   } catch (InputMismatchException e) {
-  //     FormatError.printError(e, "Line #" + (linesToSkip + 1) + " failed to pass " +
-  //         currentCheck + " check");
-  //   }
-  //   return prefixList;
-  // }
+  public static Node[] frequencyListRead(String input) throws FileNotFoundException, IOException {
+    Node[] frequencyList = new Node[26];
+    // try with resource, buffered file read on file at location
+    try (BufferedReader bufferedInputData = new BufferedReader(
+        new FileReader(new File(input)))) {
+      // read line-by-line, until no strings are left in the file
+      String s;
+      int i = 0;
+      while ((s = bufferedInputData.readLine()) != null) {
+        String c = s.substring(0, 1);
+        int w = Integer.parseInt(s.substring(4));
+        Node node = new Node(w, c);
+        frequencyList[i] = node;
+        i++;
+      }
+      // catch block with tailored problem statements
+    } catch (FileNotFoundException e) {
+      FormatError.printError(e, "File or file path invalid");
+    } catch (IOException e) {
+      FormatError.printError(e, "Incorrectly formatted data");
+    }
+    return frequencyList;
+  }
 
   /**
    * Buffered output of a data to a file. Prints entire line of formatted data
@@ -89,7 +62,7 @@ public class ReadWrite {
    * @param data   formatted data
    * @return BinaryTree containing the data
    */
-  public static void bufferedWrite(String output, String data)
+  public static void write(String output, String data)
       throws FileNotFoundException, IOException {
     // try with resource, buffered file output to file at location
     try (BufferedWriter bufferedOutputData = new BufferedWriter(
