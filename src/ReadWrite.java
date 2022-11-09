@@ -36,51 +36,51 @@ public class ReadWrite {
    * @param checks to be performed on each read item
    * @return BinaryTree containing the data
    */
-  public static GenericBinaryTree<GenericBinaryTreeNode> bufferedRead(String input, int linesToSkip, Method check)
-      throws FileNotFoundException, IOException, IllegalAccessException, IllegalArgumentException,
-      InvocationTargetException, InputMismatchException {
-    GenericBinaryTree<GenericBinaryTreeNode> prefixList = new GenericBinaryTree<>();
-    String currentCheck = "";
-    // try with resource, buffered file read on file at location
-    try (BufferedReader bufferedInputData = new BufferedReader(
-        new FileReader(new File(input)))) {
-      // move to line of interest
-      for (int line = 0; line < linesToSkip; line++) {
-        bufferedInputData.readLine();
-      }
-      // read string-by-string, until no strings are left on line
-      int i;
-      while ((i = bufferedInputData.read()) != -1) {
-        char c = (char) i;
-        if (c == '\n' || c == '\r') {
-          break;
-        }
-        currentCheck = check.getName();
-        Object result = check.invoke(null, c);
-        if ((boolean) result == false) {
-          prefixList.empty();
-          throw new InputMismatchException("Invalid data \"" + c + "\"");
-        } else {
-          prefixList.insertAtEnd(new GenericBinaryTreeNode<String>(c));
-        }
-      }
-      // catch block with tailored problem statements
-    } catch (FileNotFoundException e) {
-      FormatError.printError(e, "File or file path not invalid");
-    } catch (IOException e) {
-      FormatError.printError(e, "Incorrectly formatted data");
-    } catch (IllegalAccessException e) {
-      FormatError.printError(e, "Method not callable by this class for: " + currentCheck + "()");
-    } catch (IllegalArgumentException e) {
-      FormatError.printError(e, "Incorrect arguments or argument types for: " + currentCheck + "()");
-    } catch (InvocationTargetException e) {
-      FormatError.printError(e, "Underlying method exception for: " + currentCheck + "()");
-    } catch (InputMismatchException e) {
-      FormatError.printError(e, "Line #" + (linesToSkip + 1) + " failed to pass " +
-          currentCheck + " check");
-    }
-    return prefixList;
-  }
+  // public static BinaryTree<Node> bufferedRead(String input, int linesToSkip, Method check)
+  //     throws FileNotFoundException, IOException, IllegalAccessException, IllegalArgumentException,
+  //     InvocationTargetException, InputMismatchException {
+  //   BinaryTree<Node> prefixList = new BinaryTree<>();
+  //   String currentCheck = "";
+  //   // try with resource, buffered file read on file at location
+  //   try (BufferedReader bufferedInputData = new BufferedReader(
+  //       new FileReader(new File(input)))) {
+  //     // move to line of interest
+  //     for (int line = 0; line < linesToSkip; line++) {
+  //       bufferedInputData.readLine();
+  //     }
+  //     // read string-by-string, until no strings are left on line
+  //     int i;
+  //     while ((i = bufferedInputData.read()) != -1) {
+  //       char c = (char) i;
+  //       if (c == '\n' || c == '\r') {
+  //         break;
+  //       }
+  //       currentCheck = check.getName();
+  //       Object result = check.invoke(null, c);
+  //       if ((boolean) result == false) {
+  //         prefixList.empty();
+  //         throw new InputMismatchException("Invalid data \"" + c + "\"");
+  //       } else {
+  //         prefixList.insertAtEnd(new Node<String>(c));
+  //       }
+  //     }
+  //     // catch block with tailored problem statements
+  //   } catch (FileNotFoundException e) {
+  //     FormatError.printError(e, "File or file path not invalid");
+  //   } catch (IOException e) {
+  //     FormatError.printError(e, "Incorrectly formatted data");
+  //   } catch (IllegalAccessException e) {
+  //     FormatError.printError(e, "Method not callable by this class for: " + currentCheck + "()");
+  //   } catch (IllegalArgumentException e) {
+  //     FormatError.printError(e, "Incorrect arguments or argument types for: " + currentCheck + "()");
+  //   } catch (InvocationTargetException e) {
+  //     FormatError.printError(e, "Underlying method exception for: " + currentCheck + "()");
+  //   } catch (InputMismatchException e) {
+  //     FormatError.printError(e, "Line #" + (linesToSkip + 1) + " failed to pass " +
+  //         currentCheck + " check");
+  //   }
+  //   return prefixList;
+  // }
 
   /**
    * Buffered output of a data to a file. Prints entire line of formatted data
