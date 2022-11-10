@@ -4,8 +4,8 @@
  */
 
 /**
- * This class provides a node/leaf for a binary tree
- * array implementation
+ * This class provides a node or leaf for a binary tree
+ * array or linked list or doubly linked list implementation
  *
  * @author Justin Law
  * @version 1.0
@@ -15,6 +15,9 @@ public class Node {
 
   private int weight;
   private String data;
+  private Node left;
+  private Node right;
+  private Node parent;
 
   /**
    * Constructor to create the Node
@@ -24,6 +27,19 @@ public class Node {
   public Node(int weight, String data) {
     this.weight = weight;
     this.data = data;
+    return;
+  }
+
+  /**
+   * Overloaded constructor to create a linked Node
+   *
+   * @param weight
+   */
+  public Node(int weight, String data, Node left, Node right) {
+    this.weight = weight;
+    this.data = data;
+    this.left = left;
+    this.right = right;
     return;
   }
 
@@ -68,12 +84,72 @@ public class Node {
   }
 
   /**
+   * Gets and returns parent node
+   *
+   * @return Node parent
+   */
+  public Node parent() {
+    return this.parent;
+  }
+
+  /**
+   * Gets and returns left child node
+   *
+   * @return Node left
+   */
+  public Node left() {
+    return this.left;
+  }
+
+  /**
+   * Gets and returns right child node
+   *
+   * @return Node right
+   */
+  public Node right() {
+    return this.right;
+  }
+
+  /**
+   * Sets parent node
+   *
+   * @param Node
+   * @return Node parent
+   */
+  public Node setParent(Node node) {
+    this.parent = node;
+    return node;
+  }
+
+  /**
+   * Sets left child node
+   *
+   * @param Node
+   * @return Node left
+   */
+  public Node setLeft(Node node) {
+    this.left = node;
+    return node;
+  }
+
+  /**
+   * Sets right child node
+   *
+   * @param Node
+   * @return Node right
+   */
+  public Node setRight(Node node) {
+    this.right = node;
+    return node;
+  }
+
+  /**
    * Returns string representation of the node
    *
    * @return String
    */
+  @Override
   public String toString() {
     return String.format("%s: %d", this.data, this.weight);
   }
-
 }

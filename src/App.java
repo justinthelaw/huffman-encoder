@@ -16,6 +16,6 @@ public class App {
         Node[] nodeArr = ReadWrite.frequencyListRead(args[0]);
         MergeSort.sort(nodeArr, 0, nodeArr.length - 1);
         BinaryTree tree = new BinaryTree(nodeArr);
-        System.out.println(tree.toString());
+        tree.print();
     }
 }

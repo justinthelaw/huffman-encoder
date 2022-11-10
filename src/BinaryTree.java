@@ -4,7 +4,7 @@
  */
 
 /**
- * This class provides an array implementation of a String binary tree with
+ * This class provides a DLL implementation of a String binary tree with
  * methods for traversal, creation, insertion and printing
  *
  * @author Justin Law
@@ -14,66 +14,71 @@
 public class BinaryTree {
 
   // 0th node does not get used in this implementation
-  private Node[] tree;
+  private Node root;
   private int size;
 
   /**
-   * Constructor to create the Binary Tree from an array of nodes
+   * Constructor to create the Binary Tree from an array of Nodes with attributes
+   * of weight (int) and data (String)
    *
    * Pre-conditions: a pre-ordered array of inputs, in ascending order of weight,
-   * where tie breaks are beased on alphabetical order
-   * Example Input: [ {weight: 6, data: Z}, {weight: 20, data: R},
-   * {weight: 45, data: V}, {weight: 45, data: G} ]
+   * where tie breaks are based on String’s number of characters (xy < abcd)
+   * relative to the one it is tied with, and then alphabetically (a < b)
    *
-   * @param Node[] nodes
+   * @param Node tree head
    */
   public BinaryTree(Node[] nodes) {
-    // set the max size, 2^n nodes for Huffman Encoding
+    // set the max size, 2^n nodes for Huffman Encoding binary tree
     this.size = (int) Math.pow(2, nodes.length) - 1;
-    // initialize tree array
-    this.tree = new Node[size];
-    // find left and right children
-    Node left = nodes[0];
-    Node right = nodes[1];
+    // binary sub-trees storage array
+    Node[] subTree = new Node[size / 2];
+    int j = 0; // counter for sub-tree storage
+    for (int i = 0; i < nodes.length; i += 2) {
+      if ((i + 1) < nodes.length) {
+        subTree[j] = buildSubTree(nodes[i], nodes[i + 1]);
+      } else {
+        // odd number of characters edge case
+        subTree[j] = nodes[i];
+      }
+      j++;
+    }
+    this.root = subTree[0];
+    // combine to generate Huffman Encoding binary tree
+    for (int i = 1; i < j; i++) {
+      // intialize the weight and data for the new subtree
+      // initialize new parent for subtree
+      int weight = this.root.weight() + subTree[i].weight();
+      String data = subTree[i].data();
+      Node parent = new Node(weight, data, this.root, subTree[i]);
+      // determine left and right child nodes
+      if (this.root.weight() < subTree[i].weight()) {
+        data = this.root.data() + subTree[i].data();
+        parent.setData(data);
+      } else {
+        data += this.root.data();
+        parent.setData(data);
+        parent.setLeft(subTree[i]);
+        parent.setRight(this.root);
+      }
+      this.root = parent;
+    }
+
+  }
+
+  /**
+   * Takes in two nodes, builds a parent node, and generates a binary sub-tree
+   *
+   * @return Node binary sub-tree
+   */
+  private Node buildSubTree(Node firstNode, Node secondNode) {
+    // smaller node weight is always the left child
+    Node left = firstNode;
+    Node right = secondNode;
     // initialize the parent node parameters
     int weight = left.weight() + right.weight();
     String data = right.data() + left.data();
-    Node parent = new Node(weight, data);
-    // parent is at parentIndex
-    int parentIndex = (this.size - 2) / 2;
-    this.tree[parentIndex] = parent;
-    // left is at parentIndex * 2
-    int leftIndex = this.size - 2;
-    this.tree[leftIndex] = left;
-    // right is at parentIndex * 2 + 1
-    int rightIndex = this.size - 1;
-    this.tree[rightIndex] = right;
-
-    // TODO: compare internal node to new inserted node to determine which is right vs. left
-    if (nodes.length > 2) {
-      // add-on to base tree all upper nodes
-      for (int i = 2; i < nodes.length; i++) {
-        // set previous parent as right child node
-        rightIndex = parentIndex;
-        // determine parent node and left child node
-        // based on binary tree array implementation rules
-        parentIndex = (rightIndex / 2) - 1;
-        // if root node edge case
-        if (parentIndex == 0) {
-          parentIndex = 1;
-          leftIndex = 2;
-          this.tree[3] = this.tree[2];
-        } else {
-          leftIndex = parentIndex * 2;
-        }
-        left = nodes[i];
-        this.tree[leftIndex] = left;
-        weight += left.weight();
-        data = left.data() + data;
-        parent = new Node(weight, data);
-        this.tree[parentIndex] = parent;
-      }
-    }
+    Node parent = new Node(weight, data, left, right);
+    return parent;
   }
 
   /**
@@ -91,26 +96,28 @@ public class BinaryTree {
    * @return Node
    */
   public Node getRoot() {
-    return tree[1];
+    return this.root;
   }
 
   /**
-   * String representation of the binary tree
-   * Pre-order traversal
+   * Recursive print of the binary tree in preorder traversal
    *
+   * @param Node
    * @return String
    */
-  public String toString() {
-    String string = "";
-    for (int i = 1; i < this.size; i++) {
-      if (tree[i] != null) {
-        string += "{ " + tree[i].toString() + " }";
-        if (i != this.size - 1) {
-          string += ", ";
-        }
-      }
+  public void print(Node node) {
+    if (node == null) {
+      return;
     }
-    return string;
+
+    System.out.printf("%s: %d\n", node.data(), node.weight());
+    print(node.left());
+    print(node.right());
+  }
+
+ // wrapper for preorder print
+  public void print() {
+    print(this.root);
   }
 
 }

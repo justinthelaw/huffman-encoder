@@ -6,9 +6,9 @@
 
 The source code in this assignment can be compiled with JDK 17+ from the command line into a `project-03.jar`.
 
-To run the program as an encoder, enter: `java -jar project-03 [input frequency table file] [input clear text file] [output encoded file]`.
+To run the program as an encoder, enter: `java -jar project-03 encode [input frequency table file] [input clear text file] [output encoded file]`.
 
-To run the program as a decoder, enter: `java -jar project-03 [input frequency table file] [input coded text file] [output decoded file]`.
+To run the program as a decoder, enter: `java -jar project-03 decode [input frequency table file] [input coded text file] [output decoded file]`.
 
 This program was written in VSCode v1.71.2 in WSL 2.0, Ubuntu 20.04.4 LTS, with OpenJDK 17.0.3.
 

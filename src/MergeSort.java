@@ -7,7 +7,7 @@
  * This class provides merge sort function for a Node with an integer weight and
  * String data
  *
- * Adapted for this use case from https://www.educba.com/merge-sort-in-java/
+ * Adapted from https://www.educba.com/merge-sort-in-java/
  *
  * @author Justin Law
  * @author Priya Pedamkar
