@@ -11,11 +11,12 @@
  * @version 1.0
  */
 
-public class BinaryTree {
+public class HuffmanBinaryTree {
 
   // 0th node does not get used in this implementation
   private Node root;
   private int size;
+  private String preorderString;
 
   /**
    * Constructor to create the Binary Tree from an array of Nodes with attributes
@@ -27,7 +28,7 @@ public class BinaryTree {
    *
    * @param Node tree head
    */
-  public BinaryTree(Node[] nodes) {
+  public HuffmanBinaryTree(Node[] nodes) {
     // set the max size, 2^n nodes for Huffman Encoding binary tree
     this.size = (int) Math.pow(2, nodes.length) - 1;
     // binary sub-trees storage array
@@ -103,21 +104,37 @@ public class BinaryTree {
    * Recursive print of the binary tree in preorder traversal
    *
    * @param Node
-   * @return String
    */
-  public void print(Node node) {
+  public void preorder(Node node, String string) {
     if (node == null) {
       return;
     }
 
-    System.out.printf("%s: %d\n", node.data(), node.weight());
-    print(node.left());
-    print(node.right());
+    this.preorderString += String.format("%s: %d\n", node.data(), node.weight());
+    preorder(node.left(), string);
+    preorder(node.right(), string);
   }
 
- // wrapper for preorder print
-  public void print() {
-    print(this.root);
+  /**
+   * Wrapper for preorder traversal method
+   *
+   */
+  public void preorder() {
+    // wipe previous data from traversal
+    this.preorderString = "";
+    preorder(this.root, "");
+    System.out.println(this.preorderString.trim());
+  }
+
+  /**
+   * Override String return to be preorder print of binary tree
+   *
+   * @return String
+   */
+  @Override
+  public String toString() {
+    this.preorder();
+    return this.preorderString.trim();
   }
 
 }

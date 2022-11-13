@@ -16,6 +16,8 @@
 
 import java.io.IOException;
 import java.io.FileNotFoundException;
+import java.lang.NumberFormatException;
+import java.util.InputMismatchException;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -28,10 +30,12 @@ public class ReadWrite {
    * Buffered read of a file formatted with data on each line. Meant to read
    * line-by-line performing a check on each string.
    *
-   * @param input  file location as a string
+   * @param input file location as a string
    * @return Node[] containing the data
    */
-  public static Node[] frequencyListRead(String input) throws FileNotFoundException, IOException {
+  public static Node[] frequencyListRead(String input)
+      throws FileNotFoundException, IOException, NumberFormatException,
+      InputMismatchException {
     Node[] frequencyList = new Node[26];
     // try with resource, buffered file read on file at location
     try (BufferedReader bufferedInputData = new BufferedReader(
@@ -41,6 +45,9 @@ public class ReadWrite {
       int i = 0;
       while ((s = bufferedInputData.readLine()) != null) {
         String c = s.substring(0, 1);
+        if (!Character.isLetter(c.charAt(0))) {
+          throw new InputMismatchException();
+        }
         int w = Integer.parseInt(s.substring(4));
         Node node = new Node(w, c);
         frequencyList[i] = node;
@@ -48,9 +55,13 @@ public class ReadWrite {
       }
       // catch block with tailored problem statements
     } catch (FileNotFoundException e) {
-      FormatError.printError(e, "File or file path invalid");
+      FormatError.printError(e, "File or file path invalid.");
     } catch (IOException e) {
-      FormatError.printError(e, "Incorrectly formatted data");
+      FormatError.printError(e, "Incorrectly formatted data.");
+    } catch (NumberFormatException e) {
+      FormatError.printError(e, "A (int) weight could not be parsed. Please check input file.");
+    } catch (InputMismatchException e) {
+      FormatError.printError(e, "A (String) character could not be parsed. Please check input file.");
     }
     return frequencyList;
   }
@@ -71,9 +82,9 @@ public class ReadWrite {
       bufferedOutputData.write(data);
       // catch block with tailored problem statements
     } catch (FileNotFoundException e) {
-      FormatError.printError(e, "File or file path not invalid");
+      FormatError.printError(e, "File or file path not invalid.");
     } catch (IOException e) {
-      FormatError.printError(e, "Incorrectly formatted data");
+      FormatError.printError(e, "Incorrectly formatted data.");
     }
     return;
   }

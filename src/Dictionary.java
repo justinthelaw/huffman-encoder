@@ -18,6 +18,7 @@ public class Dictionary {
   /**
    * Constructor for dictionary with N elements
    *
+   * @param int number of entries
    */
   public Dictionary(int n) {
     this.dictionary = new HashMap<>(n);

@@ -1,3 +1,8 @@
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.lang.NumberFormatException;
+import java.util.InputMismatchException;
+
 /*
  * file: App.java
  * class: EN.605.202.82.FA22
@@ -12,10 +17,15 @@
  */
 
 public class App {
-    public static void main(String[] args) throws Exception {
-        Node[] nodeArr = ReadWrite.frequencyListRead(args[0]);
+    public static void main(String[] args) throws FileNotFoundException, IOException,
+            InputMismatchException, NumberFormatException {
+        Node[] nodeArr = ReadWrite.frequencyListRead(args[1]);
         MergeSort.sort(nodeArr, 0, nodeArr.length - 1);
-        BinaryTree tree = new BinaryTree(nodeArr);
-        tree.print();
+        HuffmanBinaryTree tree = new HuffmanBinaryTree(nodeArr);
+        String outputPreorder = "output/" + args[1].substring(6, args[1].lastIndexOf(".")) + "-PreorderTree.txt";
+        ReadWrite.write(outputPreorder, tree.toString());
+        HuffmanEncoder codeTable = new HuffmanEncoder(26);
+        codeTable.generateEncodingTable(tree);
+        System.out.println(codeTable.toString());
     }
 }
