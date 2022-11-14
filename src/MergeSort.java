@@ -63,7 +63,7 @@ public class MergeSort {
       if (left != null && right != null) {
         Boolean useWeight = left.weight() < right.weight();
         // lelefticographic comparison
-        Boolean useAlpha = left.data().compareTo(right.data()) < 0;
+        Boolean useAlpha = left.data().compareTo(right.data()) > 0;
         check = left.weight() == right.weight() ? useAlpha : useWeight;
       } else if (left == null) {
         check = false;
