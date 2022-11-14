@@ -26,11 +26,13 @@ public class HuffmanEncoder {
   }
 
   /**
-   * Traverse Huffman Binary Tree and assign a code to each character
+   * Traverse (preorder) Huffman Binary Tree and assign a code to each character
    *
    * @param HuffmanBinaryTree
+   * @param String            code
+   * @param String            add, the 1 or 0 to be added to the code
    */
-  public void generateEncodingTable(Node node, String code) {
+  public void generateEncodingTable(Node node, String code, String add) {
     if (node == null) {
       return;
     }
@@ -38,17 +40,19 @@ public class HuffmanEncoder {
     if (node.left() == null && node.right() == null) {
       encodingTable.insert(node.data(), code);
     }
-
-    generateEncodingTable(node.left(), code += "0");
-    generateEncodingTable(node.right(), code += "1");
+    // add the direction taken (Right 1 or Left 0)
+    code += add;
+    generateEncodingTable(node.left(), code, "0");
+    generateEncodingTable(node.right(), code, "1");
   }
 
   /**
    * Wrapper for encoding table generation method
    *
+   * @param HuffmanBinaryTree
    */
   public void generateEncodingTable(HuffmanBinaryTree tree) {
-    generateEncodingTable(tree.getRoot(), "");
+    generateEncodingTable(tree.getRoot(), "", "");
   }
 
   /**
@@ -64,7 +68,6 @@ public class HuffmanEncoder {
       s += arr[i] + "\n";
     }
     s = s.trim().substring(1, s.length() - 2);
-    System.out.println(s);
     return s;
   }
 

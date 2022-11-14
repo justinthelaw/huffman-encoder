@@ -82,11 +82,11 @@ public class HuffmanBinaryTree {
    * Wrapper for preorder traversal method
    *
    */
-  public void preorder() {
+  public void preorder(Boolean b) {
     // wipe previous data from traversal
     this.preorderString = "";
     preorder(this.root, "");
-    System.out.println(this.preorderString.trim());
+    if (b) System.out.println(this.preorderString.trim());
   }
 
   /**
@@ -96,7 +96,7 @@ public class HuffmanBinaryTree {
    */
   @Override
   public String toString() {
-    this.preorder();
+    this.preorder(false);
     return this.preorderString.trim();
   }
 
