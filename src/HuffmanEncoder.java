@@ -39,10 +39,8 @@ public class HuffmanEncoder {
       encodingTable.insert(node.data(), code);
     }
 
-    code += "0";
-    generateEncodingTable(node.left(), code);
-    code += "1";
-    generateEncodingTable(node.right(), code);
+    generateEncodingTable(node.left(), code += "0");
+    generateEncodingTable(node.right(), code += "1");
   }
 
   /**
@@ -60,7 +58,14 @@ public class HuffmanEncoder {
    */
   @Override
   public String toString() {
-    return this.encodingTable.toString();
+    String[] arr = this.encodingTable.toString().split(", ");
+    String s = "";
+    for (int i = 0; i < arr.length; i++) {
+      s += arr[i] + "\n";
+    }
+    s = s.trim().substring(1, s.length() - 2);
+    System.out.println(s);
+    return s;
   }
 
 }

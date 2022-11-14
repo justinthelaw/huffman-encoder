@@ -19,13 +19,23 @@ import java.util.InputMismatchException;
 public class App {
     public static void main(String[] args) throws FileNotFoundException, IOException,
             InputMismatchException, NumberFormatException {
+        // read frequency table and transform into Nodes
+        // size is total expected characters
         Node[] nodeArr = ReadWrite.frequencyListRead(args[1]);
+        // sort Nodes in ascending order based on weight
+        // if weight is equal, use lexicographic value
         MergeSort.sort(nodeArr, 0, nodeArr.length - 1);
+        // generate the Huffman Binary Tree
         HuffmanBinaryTree tree = new HuffmanBinaryTree(nodeArr);
-        String outputPreorder = "output/" + args[1].substring(6, args[1].lastIndexOf(".")) + "-PreorderTree.txt";
+        // write the preorder traversal of the binary tree to file
+        // use input filename as a prefix to output filename
+        String base = "output/" + args[1].substring(6, args[1].lastIndexOf("."));
+        String outputPreorder = base + "-PreorderTree.txt";
         ReadWrite.write(outputPreorder, tree.toString());
-        HuffmanEncoder codeTable = new HuffmanEncoder(26);
+        // generate code table based on the Huffman Binary Tree
+        HuffmanEncoder codeTable = new HuffmanEncoder(nodeArr.length);
         codeTable.generateEncodingTable(tree);
-        System.out.println(codeTable.toString());
+        String outputCodeTable = base + "-CodeTable.txt";
+        ReadWrite.write(outputCodeTable, codeTable.toString());
     }
 }

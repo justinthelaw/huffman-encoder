@@ -15,7 +15,6 @@ public class HuffmanBinaryTree {
 
   // 0th node does not get used in this implementation
   private Node root;
-  private int size;
   private String preorderString;
 
   /**
@@ -24,45 +23,18 @@ public class HuffmanBinaryTree {
    *
    * Pre-conditions: a pre-ordered array of inputs, in ascending order of weight,
    * where tie breaks are based on String’s number of characters (xy < abcd)
-   * relative to the one it is tied with, and then alphabetically (a < b)
+   * relative to the one it is tied with, and then lexicographically (a < b)
    *
    * @param Node tree head
    */
   public HuffmanBinaryTree(Node[] nodes) {
-    // set the max size, 2^n nodes for Huffman Encoding binary tree
-    this.size = (int) Math.pow(2, nodes.length) - 1;
-    // binary sub-trees storage array
-    Node[] subTree = new Node[size / 2];
-    int j = 0; // counter for sub-tree storage
-    for (int i = 0; i < nodes.length; i += 2) {
-      if ((i + 1) < nodes.length) {
-        subTree[j] = buildSubTree(nodes[i], nodes[i + 1]);
-      } else {
-        // odd number of characters edge case
-        subTree[j] = nodes[i];
-      }
-      j++;
+    // build Huffman Encoding binary tree using min-heap sub-trees
+    while (nodes[0] != null && nodes[1] != null) {
+      nodes[0] = buildSubTree(nodes[0], nodes[1]);
+      nodes[1] = null;
+      MergeSort.sort(nodes, 0, nodes.length - 1);
     }
-    this.root = subTree[0];
-    // combine to generate Huffman Encoding binary tree
-    for (int i = 1; i < j; i++) {
-      // intialize the weight and data for the new subtree
-      // initialize new parent for subtree
-      int weight = this.root.weight() + subTree[i].weight();
-      String data = subTree[i].data();
-      Node parent = new Node(weight, data, this.root, subTree[i]);
-      // determine left and right child nodes
-      if (this.root.weight() < subTree[i].weight()) {
-        data = this.root.data() + subTree[i].data();
-        parent.setData(data);
-      } else {
-        data += this.root.data();
-        parent.setData(data);
-        parent.setLeft(subTree[i]);
-        parent.setRight(this.root);
-      }
-      this.root = parent;
-    }
+    this.root = nodes[0];
 
   }
 
@@ -80,15 +52,6 @@ public class HuffmanBinaryTree {
     String data = right.data() + left.data();
     Node parent = new Node(weight, data, left, right);
     return parent;
-  }
-
-  /**
-   * Gets and returns the number of empty and non-empty nodes in the tree
-   *
-   * @return int size
-   */
-  public int getSize() {
-    return this.size;
   }
 
   /**
@@ -110,7 +73,7 @@ public class HuffmanBinaryTree {
       return;
     }
 
-    this.preorderString += String.format("%s: %d\n", node.data(), node.weight());
+    this.preorderString += String.format("%s=%d\n", node.data(), node.weight());
     preorder(node.left(), string);
     preorder(node.right(), string);
   }

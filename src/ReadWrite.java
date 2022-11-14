@@ -23,6 +23,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.PrintWriter;
 
 public class ReadWrite {
 
@@ -62,6 +63,8 @@ public class ReadWrite {
       FormatError.printError(e, "A (int) weight could not be parsed. Please check input file.");
     } catch (InputMismatchException e) {
       FormatError.printError(e, "A (String) character could not be parsed. Please check input file.");
+    } catch (ArrayIndexOutOfBoundsException e) {
+      FormatError.printError(e, "File contains more than the 26 characters in the english alphabet.");
     }
     return frequencyList;
   }
@@ -75,9 +78,15 @@ public class ReadWrite {
    */
   public static void write(String output, String data)
       throws FileNotFoundException, IOException {
+    if ((new File(output)).exists()) {
+      PrintWriter writer = new PrintWriter(output);
+      writer.print("");
+      writer.close();
+    }
     // try with resource, buffered file output to file at location
     try (BufferedWriter bufferedOutputData = new BufferedWriter(
         new FileWriter(output, true))) {
+      // empty file contents if file already exists
       // write new data
       bufferedOutputData.write(data);
       // catch block with tailored problem statements
