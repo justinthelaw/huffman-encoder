@@ -49,7 +49,7 @@ public class HuffmanBinaryTree {
     Node right = secondNode;
     // initialize the parent node parameters
     int weight = left.weight() + right.weight();
-    String data = right.data() + left.data();
+    String data = left.data() + right.data();
     Node parent = new Node(weight, data, left, right);
     return parent;
   }
@@ -67,13 +67,16 @@ public class HuffmanBinaryTree {
    * Recursive print of the binary tree in preorder traversal
    *
    * @param Node
+   * @param String stores the preorder print
    */
   public void preorder(Node node, String string) {
+    // null node means an end of the tree
     if (node == null) {
       return;
     }
-
+    // add the string
     this.preorderString += String.format("%s=%d\n", node.data(), node.weight());
+    // preorder traverses left before right nodes
     preorder(node.left(), string);
     preorder(node.right(), string);
   }

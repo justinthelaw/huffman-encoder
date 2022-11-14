@@ -33,15 +33,20 @@ public class HuffmanEncoder {
    * @param String            add, the 1 or 0 to be added to the code
    */
   public void generateEncodingTable(Node node, String code, String add) {
+    // null node means an end of the tree
     if (node == null) {
       return;
     }
 
+    // add the direction taken (Right 1 or Left 0)
+    code += add;
+
+    // leaf nodes don't have chuldren, and are characters for code table
     if (node.left() == null && node.right() == null) {
       encodingTable.insert(node.data(), code);
     }
-    // add the direction taken (Right 1 or Left 0)
-    code += add;
+
+    // preorder traverses left before right nodes
     generateEncodingTable(node.left(), code, "0");
     generateEncodingTable(node.right(), code, "1");
   }

@@ -22,6 +22,11 @@ public class App {
         // read frequency table and transform into Nodes
         // size is total expected characters
         Node[] nodeArr = ReadWrite.frequencyListRead(args[1]);
+        // // Test Nodes from project description
+        // Node x = new Node(3, "x");
+        // Node y = new Node(2, "y");
+        // Node z = new Node(1, "z");
+        // Node[] nodeArr = new Node[]{x, y, z};
         // sort Nodes in ascending order based on weight
         // if weight is equal, use lexicographic value
         MergeSort.sort(nodeArr, 0, nodeArr.length - 1);
