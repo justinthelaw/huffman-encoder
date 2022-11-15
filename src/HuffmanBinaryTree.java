@@ -49,7 +49,7 @@ public class HuffmanBinaryTree {
     Node right = secondNode;
     // initialize the parent node parameters
     int weight = left.weight() + right.weight();
-    String data = left.data() + right.data();
+    String data = right.data() + left.data();
     Node parent = new Node(weight, data, left, right);
     return parent;
   }
@@ -89,7 +89,8 @@ public class HuffmanBinaryTree {
     // wipe previous data from traversal
     this.preorderString = "";
     preorder(this.root, "");
-    if (b) System.out.println(this.preorderString.trim());
+    if (b)
+      System.out.println(this.preorderString.trim());
   }
 
   /**

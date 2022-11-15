@@ -38,16 +38,13 @@ public class HuffmanEncoder {
       return;
     }
 
-    // add the direction taken (Right 1 or Left 0)
+    // add the direction taken (right = 1 or left = 0)
     code += add;
 
     // preorder traverses left before right nodes
     generateEncodingTable(node.left(), code, "0");
-    // leaf nodes don't have chuldren, and are characters for code table
-    if (node.left() == null && node.right() == null) {
-      encodingTable.insert(node.data(), code);
-    }
     generateEncodingTable(node.right(), code, "1");
+
     // leaf nodes don't have chuldren, and are characters for code table
     if (node.left() == null && node.right() == null) {
       encodingTable.insert(node.data(), code);
