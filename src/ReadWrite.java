@@ -28,7 +28,40 @@ import java.io.PrintWriter;
 public class ReadWrite {
 
   /**
-   * Buffered read of a file formatted with data on each line. Meant to read
+   * Buffered read of a properly formatted with data on each line. Meant to read
+   * line-by-line performing a check on each string.
+   *
+   * @param input file location as a string
+   * @return String containing all the data
+   */
+  public static String clearTextRead(String input) throws FileNotFoundException,
+      IOException, InputMismatchException {
+    String clearText = "";
+    // try with resource, buffered file read on file at location
+    try (BufferedReader bufferedInputData = new BufferedReader(
+        new FileReader(new File(input)))) {
+      // read line-by-line, until no strings are left in the file
+      String s;
+      while ((s = bufferedInputData.readLine()) != null) {
+        for (int i = 0; i < s.length(); i++) {
+          if (Character.isAlphabetic(s.charAt(i))) {
+            clearText += s.charAt(i);
+          }
+        }
+      }
+      // catch block with tailored problem statements
+    } catch (FileNotFoundException e) {
+      FormatError.printError(e, "File or file path invalid.");
+    } catch (IOException e) {
+      FormatError.printError(e, "Incorrectly formatted data.");
+    } catch (InputMismatchException e) {
+      FormatError.printError(e, "A (String) character could not be parsed.");
+    }
+    return clearText.toUpperCase();
+  }
+
+  /**
+   * Buffered read of a properly formatted with data on each line. Meant to read
    * line-by-line performing a check on each string.
    *
    * @param input file location as a string
@@ -36,7 +69,7 @@ public class ReadWrite {
    */
   public static Node[] frequencyListRead(String input)
       throws FileNotFoundException, IOException, NumberFormatException,
-      InputMismatchException {
+      InputMismatchException, ArrayIndexOutOfBoundsException {
     Node[] frequencyList = new Node[26];
     // try with resource, buffered file read on file at location
     try (BufferedReader bufferedInputData = new BufferedReader(
@@ -45,12 +78,12 @@ public class ReadWrite {
       String s;
       int i = 0;
       while ((s = bufferedInputData.readLine()) != null) {
-        String c = s.substring(0, 1);
-        if (!Character.isLetter(c.charAt(0))) {
+        String string = s.substring(0, 1);
+        if (!Character.isLetter(string.charAt(0))) {
           throw new InputMismatchException();
         }
         int w = Integer.parseInt(s.substring(4));
-        Node node = new Node(w, c);
+        Node node = new Node(w, string);
         frequencyList[i] = node;
         i++;
       }

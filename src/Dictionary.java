@@ -24,7 +24,7 @@ public class Dictionary {
     this.dictionary = new HashMap<>(n);
   }
 
-   /**
+  /**
    * Inserts a new element
    *
    * @param String key
@@ -37,8 +37,17 @@ public class Dictionary {
     return String.format("%s - %s", key, value);
   }
 
+  /**
+   * Checks to see if dictionary is empty
+   *
+   * @return Boolean
+   *
+   */
+  public Boolean isEmpty() {
+    return dictionary.size() == 0;
+  }
 
-   /**
+  /**
    * Gets the value based on a key
    *
    * @param String key

@@ -62,6 +62,28 @@ public class HuffmanEncoder {
   }
 
   /**
+   * Encodes a string of text with existing huffman coding table
+   *
+   * @param String clear text
+   *
+   * @return String encoded text
+   */
+  public String encode(String clearText) throws NullPointerException {
+    String encoded = "";
+
+    for (int i = 0; i < clearText.length(); i++) {
+      String character = clearText.charAt(i) + "";
+      String code = encodingTable.get(character);
+      if (code == null) {
+        throw new NullPointerException("The Huffman Encoding table does not contain: " + character);
+      }
+      encoded += code;
+    }
+
+    return encoded;
+  }
+
+  /**
    * Override String return to be key-value pairs print
    *
    * @return String
