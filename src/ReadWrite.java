@@ -48,6 +48,7 @@ public class ReadWrite {
             clearText += s.charAt(i);
           }
         }
+        clearText += "\n";
       }
       // catch block with tailored problem statements
     } catch (FileNotFoundException e) {
@@ -65,11 +66,47 @@ public class ReadWrite {
    * line-by-line performing a check on each string.
    *
    * @param input file location as a string
+   * @return String containing all the data
+   */
+  public static String codedTextRead(String input) throws FileNotFoundException,
+      IOException, InputMismatchException, NumberFormatException {
+    String codedText = "";
+    // try with resource, buffered file read on file at location
+    try (BufferedReader bufferedInputData = new BufferedReader(
+        new FileReader(new File(input)))) {
+      // read line-by-line, until no strings are left in the file
+      String s;
+      while ((s = bufferedInputData.readLine()) != null) {
+        for (int i = 0; i < s.length(); i++) {
+          if ((s.charAt(i) + "").equals("0") || (s.charAt(i) + "").equals("1")) {
+            codedText += s.charAt(i);
+          }
+        }
+        codedText += "\n";
+      }
+      // catch block with tailored problem statements
+    } catch (FileNotFoundException e) {
+      FormatError.printError(e, "File or file path invalid.");
+    } catch (IOException e) {
+      FormatError.printError(e, "Incorrectly formatted data.");
+    } catch (InputMismatchException e) {
+      FormatError.printError(e, "A (String) coded character could not be parsed.");
+    } catch (NumberFormatException e) {
+      FormatError.printError(e, "A (String) coded character could not be parsed.");
+    }
+    return codedText;
+  }
+
+  /**
+   * Buffered read of a properly formatted with data on each line. Meant to read
+   * line-by-line performing a check on each string.
+   *
+   * @param input file location as a string
    * @return Node[] containing the data
    */
   public static Node[] frequencyListRead(String input)
       throws FileNotFoundException, IOException, NumberFormatException,
-      InputMismatchException, ArrayIndexOutOfBoundsException {
+      InputMismatchException, ArrayIndexOutOfBoundsException, StringIndexOutOfBoundsException {
     Node[] frequencyList = new Node[26];
     // try with resource, buffered file read on file at location
     try (BufferedReader bufferedInputData = new BufferedReader(
@@ -91,6 +128,8 @@ public class ReadWrite {
     } catch (FileNotFoundException e) {
       FormatError.printError(e, "File or file path invalid.");
     } catch (IOException e) {
+      FormatError.printError(e, "Incorrectly formatted data.");
+    } catch (StringIndexOutOfBoundsException e) {
       FormatError.printError(e, "Incorrectly formatted data.");
     } catch (NumberFormatException e) {
       FormatError.printError(e, "A (int) weight could not be parsed. Please check input file.");

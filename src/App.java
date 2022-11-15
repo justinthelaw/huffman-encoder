@@ -18,7 +18,8 @@ import java.util.InputMismatchException;
 
 public class App {
     public static void main(String[] args) throws FileNotFoundException, IOException,
-            InputMismatchException, NumberFormatException, NullPointerException {
+            InputMismatchException, NumberFormatException, NullPointerException,
+            StringIndexOutOfBoundsException {
         // read frequency table and transform into Nodes
         // size is total expected characters
         Node[] nodeArr = ReadWrite.frequencyListRead(args[1]);
@@ -63,7 +64,7 @@ public class App {
         metrics.storeMetric(codeTableMetric);
 
         // check if the user is encoding or decoding files
-        base = "output/" + args[2].substring(6, args[1].lastIndexOf("."));
+        base = "output/" + args[2].substring(6, args[2].lastIndexOf("."));
         if (args[0].toLowerCase().compareTo("encode") == 0) {
             // filename and message for user
             String outputEncoded = base + "-Encoded.txt";
@@ -80,7 +81,7 @@ public class App {
             try {
                 codedText = codeTable.encode(clearText);
             } catch (NullPointerException e) {
-                FormatError.printError(e, "");
+                FormatError.printError(e, "See above exception.");
             }
 
             // end metric time
@@ -95,6 +96,29 @@ public class App {
             // filename and message for user
             String outputDecoded = base + "-Decoded.txt";
             System.out.println("Decoding " + args[2] + " and outputting to " + outputDecoded);
+
+            String codedText = ReadWrite.codedTextRead(args[2]);
+            // new runtime metric for code table creation
+            RuntimeMetric decodeMetric = new RuntimeMetric(codedText.length());
+            // start metric time
+            decodeMetric.start();
+
+            // decode the encoded text
+            String decodedText = "";
+            try {
+                decodedText = codeTable.decode(codedText);
+            } catch (NullPointerException e) {
+                FormatError.printError(e, "See above exception.");
+            }
+
+            // end metric time
+            decodeMetric.end();
+            metrics.storeMetric(decodeMetric);
+
+            // write coded text to file
+            ReadWrite.write(outputDecoded, decodedText);
+            // write associated metrics to file
+            ReadWrite.write(base + "-Decoded-Metrics.csv", metrics.toString());
         }
 
     }

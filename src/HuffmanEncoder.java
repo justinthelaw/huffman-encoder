@@ -15,6 +15,7 @@
 public class HuffmanEncoder {
 
   private Dictionary encodingTable;
+  private Dictionary decodingTable;
 
   /**
    * Constructor for dictionary with N elements
@@ -23,6 +24,7 @@ public class HuffmanEncoder {
    */
   public HuffmanEncoder(int n) {
     this.encodingTable = new Dictionary(n);
+    this.decodingTable = new Dictionary(n);
   }
 
   /**
@@ -48,6 +50,7 @@ public class HuffmanEncoder {
     // leaf nodes don't have chuldren, and are characters for code table
     if (node.left() == null && node.right() == null) {
       encodingTable.insert(node.data(), code);
+      decodingTable.insert(code, node.data());
     }
 
   }
@@ -74,13 +77,43 @@ public class HuffmanEncoder {
     for (int i = 0; i < clearText.length(); i++) {
       String character = clearText.charAt(i) + "";
       String code = encodingTable.get(character);
-      if (code == null) {
+      if (character.equals("\n")) {
+        code = "\n";
+      } else if (code == null) {
         throw new NullPointerException("The Huffman Encoding table does not contain: " + character);
       }
       encoded += code;
     }
 
     return encoded;
+  }
+
+   /**
+   * Decodes a string of coded text with existing huffman coding table
+   *
+   * @param String encoded text
+   *
+   * @return String encoded text
+   */
+  public String decode(String codedText) throws NullPointerException {
+    String decoded = "";
+    String code = "";
+    for (int i = 0; i < codedText.length(); i++) {
+      code += codedText.charAt(i) + "";
+      String character = decodingTable.get(code);
+      if (code.equals("\n")) {
+        character = "\n";
+        decoded += character;
+        code = "";
+      } else if (character == null) {
+        continue;
+      } else {
+        decoded += character;
+        code = "";
+      }
+    }
+
+    return decoded;
   }
 
   /**
